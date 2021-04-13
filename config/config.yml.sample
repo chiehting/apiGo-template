@@ -1,0 +1,20 @@
+server:
+  HTTPPort: 80
+  readTimeout: 60
+  writeTimeout: 60
+
+log:
+  level: debug
+  #filePath: "./logs/log.log"
+
+database:
+  driver: mysql
+  host: 127.0.0.1:3306
+  name: infra?charset=utf8mb4&parseTime=True&loc=Local
+  user: root
+  password: 123456
+  maxopenconns: 10
+  maxidleconns: 10
+
+cache:
+  redis: redis
