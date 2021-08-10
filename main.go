@@ -1,19 +1,17 @@
 package main
 
 import (
-	"github.com/chiehting/go-template/pkg/database"
-	"github.com/chiehting/go-template/pkg/gin"
-	"github.com/chiehting/go-template/pkg/log"
+	"github.com/chiehting/apiGo-template/pkg/gin"
+	"github.com/chiehting/apiGo-template/pkg/log"
+	"github.com/chiehting/apiGo-template/services"
 )
 
 func init() {
-	err := database.RunMigration()
-	if err != nil {
-		log.Panic(err)
-	}
+	services.Service.Init()
 }
 
 func main() {
-	server := gin.HttpServer()
+	server := gin.HTTPServer()
+	log.Infof("http server listening port %s", server.Addr)
 	log.Panic(server.ListenAndServe())
 }

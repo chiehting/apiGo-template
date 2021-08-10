@@ -1,5 +1,6 @@
 # OS generated files
 .DS_Store
+Thumbs.db
 
 # Logs
 *.log
@@ -21,8 +22,9 @@
 *.exe
 *.o
 *.so
-main
 
-# Service Config
+# Service
+main
+go.sum
 config.yml
 

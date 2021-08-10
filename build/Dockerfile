@@ -12,7 +12,6 @@ RUN apk add --no-cache tzdata
 COPY --from=builder /app/build/entrypoint.sh /opt/entrypoint.sh
 COPY --from=builder /app/main /opt
 COPY --from=builder /app/public /opt/public
-COPY --from=builder /app/docs /opt/docs
 
 WORKDIR /opt
 ENTRYPOINT ["/opt/entrypoint.sh"]

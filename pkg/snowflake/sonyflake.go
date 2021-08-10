@@ -1,7 +1,7 @@
 package snowflake
 
 import (
-	"github.com/chiehting/sonyflake"
+	"github.com/sony/sonyflake"
 )
 
 var sf *sonyflake.Sonyflake

@@ -1,3 +1,8 @@
+# You can also use environment variables, for example: ENV_VERSION=0.0.1 or  ENV_LOG_LEVEL=debug
+application:
+  name: "apiGo-template"
+  version: "alpha"
+
 server:
   HTTPPort: 80
   readTimeout: 60
@@ -5,16 +10,21 @@ server:
 
 log:
   level: debug
-  #filePath: "./logs/log.log"
+  filePath: "./logs/log.log"
+  omitTimeKey: false
 
 database:
   driver: mysql
   host: 127.0.0.1:3306
-  name: infra?charset=utf8mb4&parseTime=True&loc=Local
+  name: apiGo?charset=utf8mb4&parseTime=True&loc=Local
   user: root
-  password: 123456
+  password: password
   maxopenconns: 10
   maxidleconns: 10
+  migrationFolder: ./sql
+  logLevel: 1 #Use logger.logLevel
 
 cache:
-  redis: redis
+  host: 127.0.0.1:6379
+  db: 0
+  password:

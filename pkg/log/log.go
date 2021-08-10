@@ -4,16 +4,16 @@ import (
 	"os"
 	"time"
 
-	"github.com/chiehting/go-template/pkg/config"
+	"github.com/chiehting/apiGo-template/pkg/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // error logger
-var errorLogger *zap.SugaredLogger
+var _errorLogger *zap.SugaredLogger
 
-var levelMap = map[string]zapcore.Level{
+var _levelMap = map[string]zapcore.Level{
 	"debug":  zapcore.DebugLevel,
 	"info":   zapcore.InfoLevel,
 	"warn":   zapcore.WarnLevel,
@@ -24,14 +24,14 @@ var levelMap = map[string]zapcore.Level{
 }
 
 func getLoggerLevel(lvl string) zapcore.Level {
-	if level, ok := levelMap[lvl]; ok {
+	if level, ok := _levelMap[lvl]; ok {
 		return level
 	}
 	return zapcore.InfoLevel
 }
 
 func init() {
-	cfg := config.GetLogConfig()
+	cfg := config.GetLog()
 	filePath := cfg.FilePath
 	level := getLoggerLevel(cfg.Level)
 
@@ -45,12 +45,7 @@ func init() {
 	}
 
 	syncWriter := zapcore.AddSync(&hook)
-	highPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl >= zapcore.ErrorLevel
-	})
-	lowPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl < zapcore.ErrorLevel
-	})
+
 	encoder := zap.NewProductionEncoderConfig()
 	if cfg.OmitTimeKey {
 		encoder.TimeKey = zapcore.OmitKey
@@ -59,72 +54,84 @@ func init() {
 		enc.AppendString(t.UTC().Format("2006-01-02T15:04:05Z0700"))
 	})
 	consoleDebugging := zapcore.Lock(os.Stdout)
-	consoleErrors := zapcore.Lock(os.Stderr)
 	consoleEncoder := zapcore.NewConsoleEncoder(encoder)
 	core := zapcore.NewTee(
 		zapcore.NewCore(zapcore.NewJSONEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(level)),
-		zapcore.NewCore(consoleEncoder, consoleErrors, highPriority),
-		zapcore.NewCore(consoleEncoder, consoleDebugging, lowPriority),
+		zapcore.NewCore(consoleEncoder, consoleDebugging, zap.NewAtomicLevelAt(level)),
 	)
 
 	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
-	errorLogger = logger.Sugar()
+	_errorLogger = logger.Sugar()
 
 	Infof("log.level:%s", level)
 }
 
+// Debug show debug message
 func Debug(args ...interface{}) {
-	errorLogger.Debug(args...)
+	_errorLogger.Debug(args...)
 }
 
+// Debugf show debug message by format
 func Debugf(template string, args ...interface{}) {
-	errorLogger.Debugf(template, args...)
+	_errorLogger.Debugf(template, args...)
 }
 
+// Info show debug message
 func Info(args ...interface{}) {
-	errorLogger.Info(args...)
+	_errorLogger.Info(args...)
 }
 
+// Infof show debug message by format
 func Infof(template string, args ...interface{}) {
-	errorLogger.Infof(template, args...)
+	_errorLogger.Infof(template, args...)
 }
 
+// Warn show debug message
 func Warn(args ...interface{}) {
-	errorLogger.Warn(args...)
+	_errorLogger.Warn(args...)
 }
 
+// Warnf show debug message by format
 func Warnf(template string, args ...interface{}) {
-	errorLogger.Warnf(template, args...)
+	_errorLogger.Warnf(template, args...)
 }
 
+// Error show debug message
 func Error(args ...interface{}) {
-	errorLogger.Error(args...)
+	_errorLogger.Error(args...)
 }
 
+// Errorf show debug message by format
 func Errorf(template string, args ...interface{}) {
-	errorLogger.Errorf(template, args...)
+	_errorLogger.Errorf(template, args...)
 }
 
+// DPanic show debug message
 func DPanic(args ...interface{}) {
-	errorLogger.DPanic(args...)
+	_errorLogger.DPanic(args...)
 }
 
+// DPanicf show debug message by format
 func DPanicf(template string, args ...interface{}) {
-	errorLogger.DPanicf(template, args...)
+	_errorLogger.DPanicf(template, args...)
 }
 
+// Panic show debug message
 func Panic(args ...interface{}) {
-	errorLogger.Panic(args...)
+	_errorLogger.Panic(args...)
 }
 
+// Panicf show debug message by format
 func Panicf(template string, args ...interface{}) {
-	errorLogger.Panicf(template, args...)
+	_errorLogger.Panicf(template, args...)
 }
 
+// Fatal show debug message
 func Fatal(args ...interface{}) {
-	errorLogger.Fatal(args...)
+	_errorLogger.Fatal(args...)
 }
 
+// Fatalf show debug message by format
 func Fatalf(template string, args ...interface{}) {
-	errorLogger.Fatalf(template, args...)
+	_errorLogger.Fatalf(template, args...)
 }

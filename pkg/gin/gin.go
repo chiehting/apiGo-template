@@ -3,14 +3,14 @@ package gin
 import (
 	"net/http"
 
-	"github.com/chiehting/go-template/pkg/config"
-	"github.com/chiehting/go-template/pkg/log"
-	"github.com/chiehting/go-template/routers"
+	"github.com/chiehting/apiGo-template/pkg/config"
+	"github.com/chiehting/apiGo-template/routers"
 	"github.com/gin-gonic/gin"
 )
 
-func HttpServer() *http.Server {
-	cfg := config.GetServerConfig()
+// HTTPServer setting up for the started http server
+func HTTPServer() *http.Server {
+	cfg := config.GetServer()
 	gin.SetMode(cfg.RunMode)
 	routersInit := routers.InitRouter()
 	server := &http.Server{
@@ -21,6 +21,5 @@ func HttpServer() *http.Server {
 		Handler:        routersInit,
 	}
 
-	log.Infof("http server listening port %s", cfg.HTTPPort)
 	return server
 }
